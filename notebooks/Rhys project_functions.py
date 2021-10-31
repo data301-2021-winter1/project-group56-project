@@ -2,22 +2,14 @@
  "cells": [
   {
    "cell_type": "code",
-   "execution_count": 12,
-   "id": "a0d745f7-1e11-4dc4-8763-5b207378c03b",
+   "execution_count": 1,
+   "id": "2c3169b7-19cb-4d96-ab4b-5bdc3c836e36",
    "metadata": {},
    "outputs": [],
    "source": [
     "import pandas as pd\n",
-    "import seaborn as sns"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 19,
-   "id": "621bfb75-bfc1-4fd8-a274-96419ad89dd3",
-   "metadata": {},
-   "outputs": [],
-   "source": [
+    "import numpy as np\n",
+    "\n",
     "def load_and_process(url):\n",
     "    \"\"\"\n",
     "    first line: loading my dataset to the dataframe\n",
@@ -65,6 +57,14 @@
     "    \n",
     "    return df3"
    ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "bbc297b1-72ad-45c4-930f-1c10e77d7fd7",
+   "metadata": {},
+   "outputs": [],
+   "source": []
   }
  ],
  "metadata": {
