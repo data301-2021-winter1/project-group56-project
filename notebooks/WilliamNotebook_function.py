@@ -163,8 +163,8 @@ def loadAndProcess(address):
     #method chain 3 - drop columns that wont be used in research question
     df3 = (
         df2
-        .drop(['player_id', 'team_id', 'timeOnIce', 'goals',
-               'play_id', 'emptyNet'])
+        .drop(['playerID', 'teamID', 'timeOnIce', 'goals',
+               'playID', 'emptyNet'], axis=1)
     )
     return df3
 
