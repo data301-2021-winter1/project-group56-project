@@ -7,7 +7,7 @@
 # 
 # One of the most important aspects obeing a NHL goalies is being able to perform under pressure.  I will analyze which NHL goalies have the highest save rate while shorthanded and comparing it to their even strength save percentage.  Their "clutch factor"  will also be compared to their win rate to give an idea of how key of a role they played in their victories.s.
 
-# In[8]:
+# In[4]:
 
 
 import pandas as pd 
@@ -119,7 +119,7 @@ APINHLStatistics.groupby('playerID').mean()
 
 # Task 3
 
-# In[87]:
+# In[114]:
 
 
 def load_and_process(url):
@@ -146,12 +146,14 @@ def load_and_process(url):
                               'evenStrengthSavePercentage': 'evenSave%',
                               'player_id': 'playerID',
                               'game_id': 'gameID'})
+            .groupby('playerID').mean()
             .assign(PKSavePercentage=lambda x:(x.shortHandedSaves/x.shortHandedShotsAgainst)*100) 
-            .drop(['gameID', 'team_id', 'timeOnIce', 'assists', 'goals',
+            .drop(['team_id', 'timeOnIce', 'assists', 'goals',
                    'pim', 'shots', 'saves', 'powerPlaySaves', 'shortHandedSaves',
                    'evenSaves', 'shortHandedShotsAgainst', 'evenShotsAgainst',
                    'powerPlayShotsAgainst'], axis=1)
             .sort_values(by=["PKSavePercentage"], ascending = False)
+           
         )
    
     """
@@ -164,16 +166,19 @@ def load_and_process(url):
         df2
         .dropna()
         .query('PKSavePercentage != 100')
-         )
+        )
+    
     
     return df3
           
 
 
-# In[92]:
+# In[91]:
 
 
-load_and_process("https://raw.githubusercontent.com/data301-2021-winter1/project-group56-project/main/data/raw/APINHLStatistics.csv?token=AVRK7B23RG6RJKXAKVX6R43BQ4742")
+df1 = load_and_process("https://raw.githubusercontent.com/data301-2021-winter1/project-group56-project/main/data/raw/APINHLStatistics.csv?token=AVRK7B23RG6RJKXAKVX6R43BQ4742")
+df1=df1.iloc[:-3, :]
+df1_mask = df1.query('PKSavePercentage > 50')
 
 
 # Task 4
@@ -193,7 +198,7 @@ load_and_process("https://raw.githubusercontent.com/data301-2021-winter1/project
 # - One goalie managed to rack up 27 penalty minutes in a single game! That's 300 times the mean.
 # - The min for short handed saves was -1.  This mean the opponent must've scored without shooting.  This is a result of an own-goal.
 
-# In[97]:
+# In[116]:
 
 
 import RhysNotebook_function
@@ -202,7 +207,7 @@ df = RhysNotebook_function.load_and_process("https://raw.githubusercontent.com/d
 df
 
 
-# In[93]:
+# In[117]:
 
 
 plot1 = sns.scatterplot(data=df,x="playerID", y="PKSavePercentage")
@@ -210,13 +215,50 @@ plot1.axhline(85)
 plt.show()
 
 
+# In[93]:
+
+
+sns.rugplot(df['PKSavePercentage'])
+
+
 # #### Graph Analysis
-# The above scatter plot demonstrates penalty kill save percentage of the goalies compared to their number.  It demonstrates that the majority of goalies have relatively high save percentages when they are at a disadvantage of players (above 85%).  This could suggest that many of the goalies are well suited for the pressure of being disadvantaged and being able to consistently perform well.
+# The above scatter plot demonstrates penalty kill save percentage of the goalies compared to their playerID.  It demonstrates that the most of goalies have  high save percentages when they are at a disadvantage of players (75% or above).  This could suggest that many of the goalies are well suited for the pressure of being disadvantaged and being able to consistently perform well.  Similarly, but not as well demonstrated, the rug plot shows more dense lines towards the 75%-95%
 
-# In[95]:
+# In[62]:
 
 
-df.columns
+corr = df.corr()
+plot2 = sns.heatmap(corr)
+plt.show()
+
+
+# #### Graph Analysis
+# 
+# The above heatmap demonstrates the correlation between the average save percentages of each goalie.  As we can see, there is a very strong correlation between the average save percentage and the even save percentage.  In contrast, there is little correlation between the penalty kill save percentage and the average save percentage.  This suggests that when average save percentage changes, even save percentage changes more than the penalty kill save percentage, suggesting that the latter makes up less of the overall average save percentage statistic.  The powerplay save statistic lies in between both of them. 
+
+# In[84]:
+
+
+plt.subplot(1,2,1)
+sns.barplot(x="decision", y="PKSavePercentage",data=df, estimator=np.median)
+
+plt.subplot(1,2,2)
+sns.barplot(x="decision", y="PPSave%",data=df, estimator=np.median)
+
+
+# #### Graph Analysis
+# The above bar graphs demomstrate the percentage difference between save percentages for wins and losses.  For the penalty kill save percentages, it makes nearly no difference on the goalies penalty kill save percentage on the outcome of the game.  However, during power plays, having a higher save percentage makes a signifcant impact, nearly 10% difference in whether that team will win.  This could be a result of in game momentum, and being scored on while you have a man advantage could be discouraging resulting in a loss.
+
+# In[ ]:
+
+
+
+
+
+# In[67]:
+
+
+
 
 
 # In[ ]:
