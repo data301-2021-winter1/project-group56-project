@@ -168,7 +168,7 @@ def loadAndProcess(address):
     )
     return df3
 
-loadAndProcess(r"..\data\raw\nhlStats.csv")
+
     
 
 
