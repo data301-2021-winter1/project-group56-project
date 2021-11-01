@@ -7,7 +7,7 @@
 # 
 # One of the most important aspects obeing a NHL goalies is being able to perform under pressure.  I will analyze which NHL goalies have the highest save rate while shorthanded and comparing it to their even strength save percentage.  Their "clutch factor"  will also be compared to their win rate to give an idea of how key of a role they played in their victories.s.
 
-# In[6]:
+# In[8]:
 
 
 import pandas as pd 
@@ -119,7 +119,7 @@ APINHLStatistics.groupby('playerID').mean()
 
 # Task 3
 
-# In[7]:
+# In[87]:
 
 
 def load_and_process(url):
@@ -146,7 +146,6 @@ def load_and_process(url):
                               'evenStrengthSavePercentage': 'evenSave%',
                               'player_id': 'playerID',
                               'game_id': 'gameID'})
-            .groupby('playerID').mean()
             .assign(PKSavePercentage=lambda x:(x.shortHandedSaves/x.shortHandedShotsAgainst)*100) 
             .drop(['gameID', 'team_id', 'timeOnIce', 'assists', 'goals',
                    'pim', 'shots', 'saves', 'powerPlaySaves', 'shortHandedSaves',
@@ -171,7 +170,7 @@ def load_and_process(url):
           
 
 
-# In[8]:
+# In[92]:
 
 
 load_and_process("https://raw.githubusercontent.com/data301-2021-winter1/project-group56-project/main/data/raw/APINHLStatistics.csv?token=AVRK7B23RG6RJKXAKVX6R43BQ4742")
@@ -179,7 +178,7 @@ load_and_process("https://raw.githubusercontent.com/data301-2021-winter1/project
 
 # Task 4
 
-#  # Analysis
+#  #### Analysis
 #  
 #  - Over two NHL seasons, there were a total of 322 goalies who played
 #  - Of those, only 243 had to kill a penalty (short handed)
@@ -187,17 +186,37 @@ load_and_process("https://raw.githubusercontent.com/data301-2021-winter1/project
 #  - Many of the goalies with a high PKSavePercentage have a lower PPSavePercentage.  This means they let in more goals per shots faced when they are on the powerplay than when they are killing a penalty.
 #  
 
-# # Pandas Profiling Analysis
+# #### Pandas Profiling Analysis
 # 
 # - From the profiling report, aside from saves, goalies don't offer any more statistics.  Their goals, assists and PIM are averaged at less than 1.
 # - The most goals a goalies scored in a game is 1 which is quite impressive! The most assists in a game is 2.
 # - One goalie managed to rack up 27 penalty minutes in a single game! That's 300 times the mean.
 # - The min for short handed saves was -1.  This mean the opponent must've scored without shooting.  This is a result of an own-goal.
 
-# In[ ]:
+# In[97]:
 
 
+import RhysNotebook_function
 
+df = RhysNotebook_function.load_and_process("https://raw.githubusercontent.com/data301-2021-winter1/project-group56-project/main/data/raw/APINHLStatistics.csv?token=AVRK7B23RG6RJKXAKVX6R43BQ4742")
+df
+
+
+# In[93]:
+
+
+plot1 = sns.scatterplot(data=df,x="playerID", y="PKSavePercentage")
+plot1.axhline(85)
+plt.show()
+
+
+# #### Graph Analysis
+# The above scatter plot demonstrates penalty kill save percentage of the goalies compared to their number.  It demonstrates that the majority of goalies have relatively high save percentages when they are at a disadvantage of players (above 85%).  This could suggest that many of the goalies are well suited for the pressure of being disadvantaged and being able to consistently perform well.
+
+# In[95]:
+
+
+df.columns
 
 
 # In[ ]:
