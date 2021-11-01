@@ -165,13 +165,41 @@ def load_and_process(url):
     df3 = (
         df2
         .dropna()
-        .query('PKSavePercentage != 100')
         )
     
     
     return df3
           
-
+def barGraphs(url):
+    """
+    first line: loading my dataset to the dataframe
+    second line: dropping any lines that contain NaN values. Can't use these to rank goalies.
+    """
+    df1 = (
+            pd.read_csv(url, low_memory = False)
+            .dropna()
+            )
+    
+    """
+    first line: rename some columns so they are more readable
+  
+    third line: creates a new columns "PKSavePercentage". combines shortHandedShotsAgainst and
+    shortHandedSaves to get their save percentage on the penalty kill.
+    fourth line: drops columns that won't be useful for the final analysis.
+    fifth line: sorts from highest penalty kill save percentage to lowest.
+    """
+    df2 = (
+           df1
+            .rename(columns = {'powerPlaySavePercentage': 'PPSave%',
+                              'evenStrengthSavePercentage': 'evenSave%',
+                              'player_id': 'playerID',
+                              'game_id': 'gameID'})
+            .assign(PKSavePercentage=lambda x:(x.shortHandedSaves/x.shortHandedShotsAgainst)*100) 
+            .sort_values(by=["PKSavePercentage"], ascending = False)
+           
+        )
+    
+    return df2
 
 # In[91]:
 
